@@ -1,2 +1,2 @@
 # AaDS
-This repo contains my codeworks for BMSTU-course for algorithms and data structures. 12345
+This repo contains my codeworks for BMSTU-course for algorithms and data structures.
