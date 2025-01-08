@@ -285,6 +285,11 @@ class RBT {
         b.key = tempkey;
         b.value = tempvalue;
     }
+    private void swapColors(Node a, Node b) {
+        boolean tempcolor = a.color;
+        a.color = b.color;
+        b.color = tempcolor;
+    }
     private void korrektur(Node n) {
         Node p, g, u;
         while (n.parent != null && n.parent.color) {
@@ -299,32 +304,30 @@ class RBT {
             }
             else {
                 if (g.left == p && p.left == n) {
-                    p.color = !p.color;
-                    g.color = !g.color;
                     zig(p);
-                    if (p.parent == null) {
-                        root = p;
-                    }
+                    swapColors(p, g);
+                    if (p.parent == null) root = p;
                 }
                 else if (g.right == p && p.right == n) {
-                    p.color = !p.color;
-                    g.color = !g.color;
                     zag(p);
+                    swapColors(p, g);
                     if (p.parent == null) root = p;
                 }
                 else if (g.left == p && p.right == n) {
-                    n.color = !n.color;
-                    g.color = !g.color;
                     zag(n);
-                    zig(n);
-                    if (n.parent == null) root = n;
+                    n = n.left;
+                    p = n.parent;
+                    swapColors(p, g);
+                    zig(p);
+                    if (p.parent == null) root = p;
                 }
                 else if (g.right == p && p.left == n) {
-                    n.color = !n.color;
-                    g.color = !g.color;
                     zig(n);
-                    zag(n);
-                    if (n.parent == null) root = n;
+                    n = n.right;
+                    p = n.parent;
+                    swapColors(p, g);
+                    zag(p);
+                    if (p.parent == null) root = p;
                 }
             }
         }
@@ -416,13 +419,13 @@ class RBT {
                 ++nullnodes;
                 level.append("_ ");
             } else {
-                level.append("[%d %s] ".formatted(visiting.left.key, visiting.left.color ? "r" : "b"));
+                level.append("[%d %d %s] ".formatted(visiting.left.key, visiting.key, visiting.left.color ? "r" : "b"));
             }
             if (visiting.right == null) {
                 ++nullnodes;
                 level.append("_ ");
             } else {
-                level.append("[%d %s] ".formatted(visiting.right.key, visiting.right.color ? "r" : "b"));
+                level.append("[%d %d %s] ".formatted(visiting.right.key, visiting.key, visiting.right.color ? "r" : "b"));
             }
             counter += 2;
         }
